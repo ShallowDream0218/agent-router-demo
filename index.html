@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>车载语音路由实验台</title>
+  <style>
+    :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#202522;background:#f3f5f2;font-synthesis:none;text-rendering:optimizeLegibility;--ink:#202522;--muted:#6d756f;--line:#dce2dc;--paper:#fff;--green:#176d50;--green-soft:#e7f2ec;--orange:#a35420;--orange-soft:#fbefe5;--red:#a63838;--red-soft:#f8eaea;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+    *{box-sizing:border-box}body{margin:0;min-width:320px}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #85bca4;outline-offset:2px}
+    .topbar{height:58px;padding:0 28px;border-bottom:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}.brand{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:650}.brand-mark{display:grid;place-items:center;width:27px;height:27px;border-radius:6px;background:#176d50;color:#fff;font-weight:700}.top-meta{display:flex;align-items:center;gap:16px;color:var(--muted);font-size:12px}.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#42a779;margin-right:6px}.shell{max-width:1280px;margin:0 auto;padding:27px 28px 48px}.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:21px}.eyebrow{color:var(--green);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}.page-head h1{margin:5px 0 5px;font-size:24px;line-height:1.25;letter-spacing:0;font-weight:650}.page-head p{margin:0;color:var(--muted);font-size:13px}.head-actions{display:flex;gap:8px}.icon-button,.quiet-button,.primary-button,.text-button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:5px;padding:8px 11px;font-size:12px;font-weight:600}.icon-button:hover,.quiet-button:hover,.text-button:hover{background:#f5f8f5}.primary-button{background:var(--green);color:white;border-color:var(--green)}.primary-button:hover{background:#105a40}.primary-button:disabled{opacity:.5;cursor:wait}.tabs{height:42px;display:flex;gap:22px;border-bottom:1px solid var(--line);margin-bottom:20px}.tab{background:none;border:0;color:var(--muted);font-size:13px;padding:0 1px 11px;position:relative}.tab.active{color:var(--green);font-weight:650}.tab.active:after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--green)}
+    .layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.85fr);gap:18px;align-items:start}.panel{background:var(--paper);border:1px solid var(--line);border-radius:6px}.panel-head{min-height:49px;padding:13px 16px;border-bottom:1px solid #e9ede9;display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-head h2{font-size:13px;margin:0;font-weight:650}.panel-head span{font-size:11px;color:var(--muted)}.panel-body{padding:16px}.section-label{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:650;margin:0 0 8px}.label-note{color:var(--muted);font-size:11px;font-weight:400}.textarea-wrap{position:relative}.utterance{width:100%;height:105px;resize:vertical;border:1px solid #cfd8d0;border-radius:4px;padding:12px 13px;font-size:14px;line-height:1.6;color:var(--ink);background:#fff}.textarea-footer{display:flex;justify-content:space-between;padding-top:6px;color:#8a928c;font-size:10px}.example-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0 18px}.example-label{font-size:11px;color:var(--muted);margin-right:2px}.example-chip{border:1px solid var(--line);border-radius:4px;padding:6px 8px;color:#48514a;background:#fff;font-size:11px}.example-chip:hover{border-color:#8cb29d;background:#f5faf6}.control-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.mode-label{font-size:11px;color:var(--muted)}.segmented{display:inline-flex;padding:3px;background:#edf1ed;border-radius:5px;gap:2px}.segmented button{border:0;background:transparent;padding:6px 9px;border-radius:3px;color:#68716b;font-size:11px}.segmented button.active{background:#fff;color:var(--green);box-shadow:0 1px 3px #1d33261a;font-weight:650}.provider-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}.provider{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:5px;min-width:0;cursor:pointer}.provider:has(input:checked){border-color:#76a48d;background:#f8fbf8}.provider input{margin:2px 0 0;accent-color:var(--green)}.provider-text{min-width:0;flex:1}.provider-title{font-size:11px;font-weight:650}.provider-model{font-family:var(--mono);color:#858e87;font-size:9px;margin-top:3px;overflow-wrap:anywhere}.key-state{font-size:9px;color:#89918b;white-space:nowrap}.key-state.ready{color:var(--green)}.mode-warning{margin-top:12px;padding:9px 10px;border-left:2px solid #d59b54;background:#fbf6ec;color:#745629;font-size:11px;line-height:1.5}.mode-warning.live{border-color:#6c9b7f;background:#eff6f1;color:#3d634d}.run-row{display:flex;justify-content:flex-end;margin-top:14px}.results{margin-top:18px}.results-content{padding:0 16px}.empty-state{padding:28px 8px;text-align:center;color:#8b938d;font-size:12px}.provider-result{padding:13px 0;border-bottom:1px solid #edf0ed}.provider-result:last-child{border-bottom:0}.provider-result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px}.result-name{font-size:11px;font-weight:650}.result-model{font-family:var(--mono);font-size:9px;color:#858e87;margin-top:3px}.provider-summary{font-size:10px;color:#68716b;white-space:nowrap}.sentence-result{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;padding:9px 10px;border-top:1px solid #edf0ed}.sentence-text{font-size:12px;line-height:1.55;overflow-wrap:anywhere}.sentence-meta{display:flex;align-items:flex-start;gap:7px}.sentence-reason{grid-column:1/3;color:#7c847e;font-size:10px;line-height:1.45}.forwarded-text{margin-top:8px;padding:9px 10px;background:var(--green-soft);border-radius:4px;font-size:11px;line-height:1.55;overflow-wrap:anywhere;white-space:pre-wrap}.forwarded-text.empty{background:#f2f5f2;color:#778078}.decision{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:3px;font-size:10px;font-weight:650;white-space:nowrap}.decision.yes{color:#176d50;background:var(--green-soft)}.decision.no{color:#59635c;background:#eef1ee}.decision.error{color:var(--red);background:var(--red-soft)}.result-cap{color:#5d665f;font-size:10px}.result-latency{text-align:right;color:#737c75;font:10px var(--mono)}.right-col{display:grid;gap:18px}.route-flow{display:grid;grid-template-columns:1fr 22px 1fr 22px 1.25fr;align-items:center;gap:4px;padding:15px 14px 13px}.flow-node{min-height:54px;border:1px solid var(--line);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:4px;font-size:10px;background:#fff}.flow-node.active{border-color:#77a48e;background:#f3f8f4}.flow-node strong{font-size:10px}.flow-node small{font-size:9px;color:var(--muted)}.flow-arrow{text-align:center;color:#99a29b;font-size:13px}.threshold{padding:0 15px 14px}.threshold-head{display:flex;justify-content:space-between;font-size:11px;margin:4px 0 8px}.threshold-head strong{font-family:var(--mono);color:var(--green)}input[type=range]{width:100%;accent-color:var(--green)}.range-scale{display:flex;justify-content:space-between;color:#9aa19b;font-size:9px;margin-top:3px}.route-result{margin:0 14px 8px;padding:10px 11px;border-radius:4px;background:#f2f5f2;display:flex;align-items:center;justify-content:space-between;gap:10px}.route-result.escalate{background:var(--orange-soft)}.route-result.local{background:var(--green-soft)}.route-result span{font-size:10px;color:#5d665f}.route-result strong{font-size:11px;color:var(--green)}.route-result.escalate strong{color:var(--orange)}.forwarded-box{margin:0 14px 14px}.forwarded-label{font-size:10px;font-weight:650;color:#59635c}.forwarded-box .forwarded-text{margin-top:5px}.metrics{display:grid;grid-template-columns:repeat(2,1fr);padding:12px 14px;gap:0}.metric{padding:6px 9px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.metric:nth-child(2){border-right:0}.metric:nth-child(3){padding-left:0}.metric:nth-child(n+3){padding-top:10px;border-bottom:0}.metric span{display:block;color:var(--muted);font-size:9px}.metric strong{display:block;margin-top:5px;font:600 17px var(--mono);color:#303934}.confusion{padding:0 14px 14px}.confusion-title{font-size:10px;color:var(--muted);margin:4px 0 7px}.matrix{display:grid;grid-template-columns:1fr 1fr;gap:5px}.matrix-cell{padding:8px;border-radius:4px;background:#f2f5f2;display:flex;justify-content:space-between;font-size:9px;color:#646d66}.matrix-cell b{font:600 11px var(--mono);color:#354139}.disclaimer{border-top:1px solid var(--line);padding:10px 14px;color:#858d87;font-size:9px;line-height:1.5}.dataset-view{display:none}.dataset-table{width:100%;border-collapse:collapse;font-size:11px}.dataset-table th,.dataset-table td{padding:10px 12px;border-bottom:1px solid #ebefeb;text-align:left;vertical-align:top}.dataset-table th{color:#78817a;font-size:10px;font-weight:600;background:#fafbfa}.dataset-table td:first-child{font-family:var(--mono);color:#929a93;width:48px}.dataset-table td:nth-child(2){line-height:1.5}.label-yes{color:var(--green);font-weight:650}.label-no{color:#727b74}.table-actions{display:flex;gap:8px}.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);max-width:min(620px,calc(100vw - 28px));padding:11px 15px;background:#202822;color:white;border-radius:5px;font-size:12px;box-shadow:0 5px 20px #0002;z-index:9}.hidden{display:none!important}.footer-note{margin-top:17px;text-align:right;color:#929992;font-size:10px}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.right-col{grid-template-columns:repeat(2,minmax(0,1fr))}.right-col .panel:first-child{grid-column:1/-1}}
+    @media(max-width:600px){.topbar{padding:0 15px;height:52px}.top-meta{gap:8px}.top-meta .version{display:none}.shell{padding:20px 14px 34px}.page-head{align-items:flex-start;flex-direction:column}.page-head h1{font-size:21px}.head-actions{align-self:flex-end;margin-top:-4px}.provider-list{grid-template-columns:1fr}.right-col{grid-template-columns:1fr}.right-col .panel:first-child{grid-column:auto}.result-row{grid-template-columns:minmax(86px,.8fr) minmax(100px,1fr) 62px;gap:8px}.result-latency{grid-column:3;grid-row:1}.result-cap{grid-column:2;grid-row:1}.result-reason{grid-column:1/4;margin-top:0}.route-flow{grid-template-columns:1fr 18px 1fr 18px 1.2fr;padding-left:10px;padding-right:10px}.control-row{align-items:flex-start;flex-direction:column}.dataset-table th,.dataset-table td{padding:8px 7px}.footer-note{text-align:left}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">R</span><span>车载语音路由实验台</span></div>
+    <div class="top-meta"><span><i class="status-dot"></i>本地运行</span><span class="version">中文文本 · 原型</span></div>
+  </header>
+  <main class="shell">
+    <section class="page-head">
+      <div><div class="eyebrow">SENTENCE ROUTING BENCH</div><h1>Agent 句子筛选</h1><p>逐句判断哪些内容应交给 Agent，并保留其他句子。</p></div>
+      <div class="head-actions"><button class="icon-button" id="exportBtn" title="导出当前结果">↓ 导出</button><button class="quiet-button" id="resetBtn" title="清空输入和结果">清空</button></div>
+    </section>
+    <nav class="tabs"><button class="tab active" data-view="experiment">文本筛选</button><button class="tab" data-view="dataset">句子样例 <span id="sampleCount"></span></button></nav>
+
+    <section id="experimentView" class="view">
+      <div class="layout">
+        <div class="main-col">
+          <section class="panel">
+            <div class="panel-head"><h2>输入文本</h2><span>中文普通话文本</span></div>
+            <div class="panel-body">
+              <div class="section-label"><span>用户原文</span><span class="label-note">按句筛选；逗号不拆句</span></div>
+              <div class="textarea-wrap"><textarea id="utterance" class="utterance" maxlength="500" placeholder="例如：你好。导航到公司。谢谢。" aria-label="输入中文文本"></textarea><div class="textarea-footer"><span id="inputHint">最多 500 字</span><span><b id="charCount">0</b> / 500</span></div></div>
+              <div class="example-row"><span class="example-label">快速样例</span><button class="example-chip" data-sample="我有点冷，把温度调高两度">隐含控制</button><button class="example-chip" data-sample="导航到最近的充电站，避开高速">导航多约束</button><button class="example-chip" data-sample="嗯，谢谢">确认/寒暄</button><button class="example-chip" data-sample="你好。导航到公司。谢谢。">混合句筛选</button></div>
+              <div class="control-row"><div><div class="mode-label" style="margin-bottom:6px">运行方式</div><div class="segmented" role="group" aria-label="运行方式"><button class="active" data-mode="simulate">模拟体验</button><button data-mode="live">真实 API</button></div></div><div class="mode-label" id="modeDescription">本地基线规则 · 不调用模型 API</div></div>
+              <div class="provider-list" id="providerList" aria-label="模型供应商"></div>
+              <div id="modeWarning" class="mode-warning">模拟模式输出是本地规则基线，不代表 Qwen、DeepSeek 等模型的推理结果。</div>
+              <div class="run-row"><button class="primary-button" id="runBtn">筛选 Agent 句子 <span aria-hidden="true">→</span></button></div>
+            </div>
+          </section>
+
+          <section class="panel results">
+            <div class="panel-head"><h2>逐句判断</h2><span id="resultSummary">等待输入</span></div>
+            <div class="results-content" id="results"><div class="empty-state">输入多句话，运行后查看需要发送给 Agent 的句子。</div></div>
+          </section>
+        </div>
+
+        <aside class="right-col">
+          <section class="panel">
+            <div class="panel-head"><h2>车端级联模拟</h2><span>规则基线 · 非真实小模型</span></div>
+            <div class="route-flow" aria-label="级联流转">
+              <div class="flow-node active"><strong>中文句子</strong><small>逐句切分</small></div><div class="flow-arrow">›</div>
+              <div class="flow-node active"><strong>本地规则</strong><small>置信度估计</small></div><div class="flow-arrow">›</div>
+              <div class="flow-node" id="agentNode"><strong>云端 Agent</strong><small>低置信 / 复杂 / 高风险</small></div>
+            </div>
+            <div class="threshold"><div class="threshold-head"><label for="threshold">本地处理置信度阈值</label><strong id="thresholdValue">0.78</strong></div><input type="range" id="threshold" min="50" max="95" value="78" step="1"><div class="range-scale"><span>0.50 更积极本地处理</span><span>0.95 更多升级</span></div></div>
+            <div id="routeResult" class="route-result"><span>等待话术</span><strong>—</strong></div>
+            <div class="forwarded-box"><div class="forwarded-label">发送给 Agent</div><div id="forwardedSentences" class="forwarded-text empty">等待判定</div></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h2>样例集评估</h2><button class="text-button" id="evaluateBtn">运行全部样例</button></div>
+            <div class="metrics"><div class="metric"><span>句子级召回率</span><strong id="recallMetric">—</strong></div><div class="metric"><span>句子级误转率</span><strong id="falseMetric">—</strong></div><div class="metric"><span>评测句数</span><strong id="countMetric">0</strong></div><div class="metric"><span>分句边界准确率</span><strong id="boundaryMetric">—</strong></div></div>
+            <div class="confusion"><div class="confusion-title">预测结果 × 人工标签</div><div class="matrix"><div class="matrix-cell"><span>正例判正 TP</span><b id="tp">—</b></div><div class="matrix-cell"><span>负例判正 FP</span><b id="fp">—</b></div><div class="matrix-cell"><span>正例判负 FN</span><b id="fn">—</b></div><div class="matrix-cell"><span>负例判负 TN</span><b id="tn">—</b></div></div></div>
+            <div class="disclaimer">样例标签是原型假设，运行前请由产品/语音团队确认标注口径。模拟统计不代表任何供应商模型的表现。</div>
+          </section>
+        </aside>
+      </div>
+      <div class="footer-note">confidence 为模拟规则分值或模型自报分值，未做统计校准。</div>
+    </section>
+
+    <section id="datasetView" class="view dataset-view">
+      <section class="panel">
+        <div class="panel-head"><h2>中文边界样例</h2><div class="table-actions"><span>人工预设标签 · 仅用于 Demo</span><button class="text-button" id="runBatchFromTable">运行级联评估</button></div></div>
+        <div style="overflow:auto"><table class="dataset-table"><thead><tr><th>ID</th><th>句子</th><th>能力</th><th>是否转交 Agent</th><th>覆盖场景</th></tr></thead><tbody id="datasetBody"></tbody></table></div>
+      </section>
+      <div class="footer-note">评测时应加入真实 ASR 错字、省略表达、地区口语和多轮上下文，并由人工复核标签。</div>
+    </section>
+  </main>
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script>
+    const providers = [
+      {id:"qwen",name:"Qwen Flash · 阿里云百炼",model:"qwen-flash",checked:true},
+      {id:"deepseek",name:"DeepSeek Flash",model:"deepseek-flash",checked:true},
+      {id:"glm",name:"GLM-5.3-Flash · 智谱",model:"glm-5.3-flash",checked:true},
+      {id:"kimi",name:"Kimi K3",model:"kimi-k3",checked:false}
+    ];
+    const samples = [
+      {text:"我有点冷，把温度调高两度",needs_agent:true,capability:"vehicle_control",scenario:"隐含意图 / 车辆控制"},
+      {text:"导航到最近的充电站，避开高速",needs_agent:true,capability:"navigation",scenario:"多约束导航"},
+      {text:"刚才那首歌是谁唱的？",needs_agent:true,capability:"media",scenario:"上下文指代"},
+      {text:"附近有没有还开着的药店？",needs_agent:true,capability:"knowledge",scenario:"实时信息查询"},
+      {text:"把副驾驶的温度调低一点",needs_agent:true,capability:"vehicle_control",scenario:"明确车辆操作"},
+      {text:"明天早上八点提醒我给车充电",needs_agent:true,capability:"other",scenario:"多步 / 提醒任务"},
+      {text:"我刚才是不是错过出口了？",needs_agent:true,capability:"navigation",scenario:"驾驶上下文问题"},
+      {text:"这附近有什么适合带孩子吃的？",needs_agent:true,capability:"knowledge",scenario:"开放域推荐"},
+      {text:"嗯，谢谢",needs_agent:false,capability:"conversation",scenario:"确认 / 感谢"},
+      {text:"你好",needs_agent:false,capability:"conversation",scenario:"寒暄"},
+      {text:"好，知道了",needs_agent:false,capability:"conversation",scenario:"确认"},
+      {text:"呃……",needs_agent:false,capability:"none",scenario:"无完整意图"},
+      {text:"后面那辆车",needs_agent:false,capability:"none",scenario:"残句"},
+      {text:"播放周杰伦的歌",needs_agent:true,capability:"media",scenario:"媒体控制"},
+      {text:"今天星期几？",needs_agent:true,capability:"knowledge",scenario:"通用知识问答"},
+      {text:"取消刚才的导航",needs_agent:true,capability:"navigation",scenario:"取消 / 指代"},
+      {text:"车窗怎么起雾了？",needs_agent:true,capability:"vehicle_info",scenario:"车况 / 知识解释"},
+      {text:"嗯嗯嗯嗯",needs_agent:false,capability:"none",scenario:"确认词重复 / 非请求"}
+    ];
+    const evaluationTexts=samples.map(sample=>({text:sample.text,expected:[{sentence:sample.text,needs_agent:sample.needs_agent}]})).concat([
+      {text:"你好。导航到公司。谢谢。",expected:[{sentence:"你好。",needs_agent:false},{sentence:"导航到公司。",needs_agent:true},{sentence:"谢谢。",needs_agent:false}]},
+      {text:"打开空调。播放音乐。",expected:[{sentence:"打开空调。",needs_agent:true},{sentence:"播放音乐。",needs_agent:true}]},
+      {text:"我有点累。附近有什么咖啡店？",expected:[{sentence:"我有点累。",needs_agent:false},{sentence:"附近有什么咖啡店？",needs_agent:true}]}
+    ]);
+    const capabilityNames={vehicle_control:"车辆控制",navigation:"导航",media:"媒体",vehicle_info:"车况",knowledge:"知识问答",conversation:"对话",other:"其他",none:"无"};
+    let mode="simulate", apiState={}, lastResults=[], lastUtterance="";
+    const $=id=>document.getElementById(id);
+    function toast(message){const el=$("toast");el.textContent=message;el.classList.remove("hidden");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.add("hidden"),3400)}
+    function renderProviders(){
+      $("providerList").innerHTML=providers.map(p=>{const s=apiState[p.id]||{};return `<label class="provider"><input type="checkbox" data-provider="${p.id}" ${p.checked?"checked":""} ${mode==="simulate"?"disabled":""}><span class="provider-text"><span class="provider-title">${p.name}</span><span class="provider-model">${escapeHtml(s.model||p.model)}</span></span><span class="key-state ${s.keyConfigured?"ready":""}">${mode==="live"?(s.keyConfigured?"已配置":"未配置密钥"):"真实候选"}</span></label>`}).join("");
+      $("providerList").querySelectorAll("input").forEach(input=>input.addEventListener("change",()=>{const p=providers.find(item=>item.id===input.dataset.provider);p.checked=input.checked}));
+    }
+    function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]))}
+    async function loadStatus(){try{const r=await fetch("/api/status");apiState=(await r.json()).providers||{}}catch{apiState={}}renderProviders()}
+    function setMode(next){mode=next;document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));$("modeDescription").textContent=mode==="simulate"?"本地基线规则 · 不调用模型 API":"并行调用已选供应商 · 需配置 API 密钥";$("modeWarning").classList.toggle("live",mode==="live");$("modeWarning").textContent=mode==="simulate"?"模拟模式输出是本地规则基线，不代表 Qwen、DeepSeek 等模型的推理结果。":"请求由本机服务端转发；密钥仅从启动服务的终端环境变量读取，不会发送到浏览器。模型版本请以各平台控制台为准。";renderProviders()}
+    function localClassify(text){
+      const t=text.trim();
+      const filler=/(^(你好|您好|嗨|谢谢|多谢|嗯|嗯嗯|好|好的|知道了|收到|再见|拜拜|不用了|没事)[。！!，,？?]*$)|^(呃+|啊+|唔+)[。！!，,？?]*$/;
+      const fragments=/^(后面那辆车|左边那个|红色的|然后呢|嗯+嗯*)[。！!，,？?]*$/;
+      const vehicle=/(空调|温度|车窗|车门|天窗|座椅|方向盘|雨刷|除雾|后视镜|氛围灯|车灯|车速|胎压|续航|油量|电量|充电)/;
+      const nav=/(导航|路线|怎么走|附近|目的地|停车场|充电站|加油站|避开高速|避开拥堵|带我去|到公司|到家)/;
+      const media=/(播放|放一首|暂停|继续播放|下一首|上一首|音量|歌曲|歌手|专辑|电台|音乐|歌词)/;
+      const knowledge=/(什么|怎么|为什么|多少|哪里|几点|几号|星期几|天气|新闻|有没有|是谁|能不能|可以吗|推荐)/;
+      const task=/(提醒我|记得|帮我|给我|设置|打开|关闭|调高|调低|降低|升高|调到|取消|查一下|告诉我|解释一下|搜索)/;
+      const pronoun=/(刚才|那个|上一个|前面|后面|它|这首|那首|这里|那里)/;
+      if(filler.test(t)||fragments.test(t)) return {needs_agent:false,capability:"conversation",risk:"low",confidence:.93,reason:"寒暄、确认词或不完整话语，未识别到需要 Agent 处理的请求。",complex:false};
+      let capability="other";if(/(胎压|续航|油量|电量|车速|故障|警告灯)/.test(t))capability="vehicle_info";else if(vehicle.test(t))capability="vehicle_control";else if(nav.test(t))capability="navigation";else if(media.test(t))capability="media";else if(knowledge.test(t))capability="knowledge";
+      const likelyRequest=task.test(t)||/[？?]$/.test(t)||knowledge.test(t)||vehicle.test(t)||nav.test(t)||media.test(t);
+      if(likelyRequest){const complex=pronoun.test(t)||/(并且|然后|顺便|同时|最好|避开|比较|推荐|为什么)/.test(t)||t.length>26;const risk=capability==="vehicle_control"&&/(刹车|油门|方向盘|车速|车门|天窗)/.test(t)?"high":capability==="vehicle_control"?"medium":"low";return {needs_agent:true,capability,risk,confidence:complex?.69:(task.test(t)?.91:.84),reason:complex?"包含上下文指代、多约束或组合意图，建议交给 Agent 处理。":"识别到明确的操作、查询或信息请求，建议交给 Agent 处理。",complex};}
+      if(t.length<=2)return {needs_agent:false,capability:"none",risk:"low",confidence:.57,reason:"话语较短且缺少明确意图，当前基线倾向本地保留；生产策略可选择追问。",complex:false};
+      return {needs_agent:true,capability:"other",risk:"low",confidence:.62,reason:"未匹配简单本地模式，按保守策略升级 Agent，避免漏掉隐含请求。",complex:true};
+    }
+    function splitSentences(text){
+      return (text.match(/[^。！？!?；;\n]+[。！？!?；;]*|[。！？!?；;]+|\n+/g)||[]).map(s=>s.trim()).filter(Boolean);
+    }
+    function analyzeLocally(text){return splitSentences(text).map(sentence=>({sentence,...localClassify(sentence)}))}
+    function localRoute(decision){
+      const threshold=Number($("threshold").value)/100;
+      const force=decision.risk==="high"||decision.complex||decision.confidence<threshold;
+      return {escalate:decision.needs_agent||force,threshold,reason:decision.risk==="high"?"高风险能力强制升级":decision.needs_agent?"分类结果需要 Agent":decision.complex?"复杂/多轮意图升级":decision.confidence<threshold?"低于本地置信度阈值":"高置信度非请求留在本地"};
+    }
+    function renderRoute(sentences){
+      const routed=sentences.map(item=>({sentence:item.sentence,...localRoute(item)}));
+      const selected=routed.filter(item=>item.escalate).map(item=>item.sentence);
+      const escalated=selected.length>0;const threshold=Number($("threshold").value)/100;
+      const box=$("routeResult");box.className="route-result "+(escalated?"escalate":"local");
+      box.innerHTML=`<span>${selected.length} / ${sentences.length} 句转交 · 阈值 ${threshold.toFixed(2)}</span><strong>${escalated?"升级 Agent":"本地处理"}</strong>`;
+      const forwarded=$("forwardedSentences");forwarded.classList.toggle("empty",!selected.length);forwarded.textContent=selected.length?selected.join("\n"):"无句子需要转交";
+      $("agentNode").classList.toggle("active",escalated);
+    }
+    function renderResultRows(results){
+      lastResults=results;const valid=results.filter(r=>!r.error);const total=Math.max(0,...valid.map(r=>(r.sentences||[]).length));
+      $("resultSummary").textContent=`${results.length} 个候选 · ${total} 句 · ${mode==="simulate"?"模拟基线":"真实 API"}`;
+      $("results").innerHTML=results.map(r=>{
+        if(r.error)return `<div class="provider-result"><div class="provider-result-head"><div><div class="result-name">${escapeHtml(r.name)}</div><div class="result-model">${escapeHtml(r.model||"")}</div></div><span class="decision error">调用失败</span></div><div class="sentence-reason">${escapeHtml(r.error)}</div></div>`;
+        const items=r.sentences||[];const selected=items.filter(s=>s.needs_agent).map(s=>s.sentence);
+        const sentenceRows=items.map(s=>`<div class="sentence-result"><div class="sentence-text">${escapeHtml(s.sentence||"")}</div><div class="sentence-meta"><span class="decision ${s.needs_agent?"yes":"no"}">${s.needs_agent?"转交":"保留"}</span><span class="result-cap">${escapeHtml(capabilityNames[s.capability]||s.capability||"—")}</span></div><div class="sentence-reason">${escapeHtml(s.reason||"")} · 风险 ${escapeHtml(s.risk||"未知")} · confidence ${Number(s.confidence||0).toFixed(2)}${mode==="simulate"?"（规则分值）":"（模型自报）"}</div></div>`).join("");
+        return `<div class="provider-result"><div class="provider-result-head"><div><div class="result-name">${escapeHtml(r.name)}</div><div class="result-model">${escapeHtml(r.model||"本地规则基线")}</div></div><span class="provider-summary">筛选 ${selected.length} / ${items.length} 句 · ${r.latencyMs!=null?r.latencyMs+" ms":mode==="simulate"?"模拟":"—"}</span></div>${sentenceRows}<div class="forwarded-text ${selected.length?"":"empty"}">${selected.length?escapeHtml(selected.join("\n")):"无句子需要转交"}</div></div>`;
+      }).join("");$("exportBtn").disabled=!results.length;
+    }
+    async function runSingle(){
+      const text=$("utterance").value.trim();if(!text){toast("请输入一条中文话术。");$("utterance").focus();return}lastUtterance=text;$("runBtn").disabled=true;$("runBtn").textContent="判定中…";
+      try{
+        if(mode==="simulate"){const sentences=analyzeLocally(text);renderResultRows([{name:"本地规则基线",model:"sentence-split simulation · 不代表真实模型",sentences}]);renderRoute(sentences);}
+        else{const selected=providers.filter(p=>p.checked);if(!selected.length){toast("请至少选择一个供应商。");return}renderResultRows(selected.map(p=>({name:p.name,model:apiState[p.id]?.model||p.model,error:"等待调用…"})));const outputs=await Promise.all(selected.map(async p=>{const model=apiState[p.id]?.model||p.model;try{const r=await fetch("/api/evaluate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({provider:p.id,model,text})});const data=await r.json();if(!r.ok)throw new Error(data.error+(data.detail?" "+data.detail:""));return {name:p.name,model:data.model,latencyMs:data.latencyMs,sentences:data.sentences}}catch(error){return {name:p.name,model,error:error.message}}}));renderResultRows(outputs);renderRoute(analyzeLocally(text));}
+      }finally{$("runBtn").disabled=false;$("runBtn").innerHTML='筛选 Agent 句子 <span aria-hidden="true">→</span>'}
+    }
+    function runBatch(){
+      let tp=0,fp=0,fn=0,tn=0,exactBoundaries=0,totalSentences=0;
+      for(const utterance of evaluationTexts){
+        const predicted=analyzeLocally(utterance.text);const expected=utterance.expected;
+        if(predicted.length===expected.length&&predicted.every((item,index)=>item.sentence===expected[index].sentence))exactBoundaries++;
+        totalSentences+=expected.length;
+        for(let i=0;i<Math.max(predicted.length,expected.length);i++){const p=Boolean(predicted[i]?.needs_agent);const actual=Boolean(expected[i]?.needs_agent);if(p&&actual)tp++;else if(p&&!actual)fp++;else if(!p&&actual)fn++;else tn++}
+      }
+      const recall=tp+fn?tp/(tp+fn):0;const falseRate=fp+tn?fp/(fp+tn):0;
+      $("recallMetric").textContent=(recall*100).toFixed(0)+"%";$("falseMetric").textContent=(falseRate*100).toFixed(0)+"%";
+      $("countMetric").textContent=totalSentences;$("boundaryMetric").textContent=(exactBoundaries/evaluationTexts.length*100).toFixed(0)+"%";
+      $("tp").textContent=tp;$("fp").textContent=fp;$("fn").textContent=fn;$("tn").textContent=tn;
+      toast(`已评估 ${evaluationTexts.length} 段文本 / ${totalSentences} 句；仅为本地规则基线。`)
+    }
+    function renderDataset(){$("sampleCount").textContent=samples.length;$("datasetBody").innerHTML=samples.map((s,i)=>`<tr><td>${String(i+1).padStart(2,"0")}</td><td>${escapeHtml(s.text)}</td><td>${escapeHtml(capabilityNames[s.capability]||s.capability)}</td><td class="${s.needs_agent?"label-yes":"label-no"}">${s.needs_agent?"是":"否"}</td><td>${escapeHtml(s.scenario)}</td></tr>`).join("")}
+    function exportResults(){const data={createdAt:new Date().toISOString(),mode,utterance:lastUtterance,results:lastResults,sampleEvaluation:{textCount:evaluationTexts.length,sentenceCount:evaluationTexts.reduce((count,item)=>count+item.expected.length,0),threshold:Number($("threshold").value)/100},samples};const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="agent-router-evaluation.json";a.click();URL.revokeObjectURL(a.href)}
+    function reset(){
+      $("utterance").value="";$("charCount").textContent="0";
+      $("results").innerHTML='<div class="empty-state">输入多句话，运行后查看需要发送给 Agent 的句子。</div>';
+      $("resultSummary").textContent="等待输入";$("routeResult").className="route-result";
+      $("routeResult").innerHTML="<span>等待话术</span><strong>—</strong>";
+      $("forwardedSentences").textContent="等待判定";$("forwardedSentences").classList.add("empty");
+      $("agentNode").classList.remove("active");lastResults=[];lastUtterance="";
+    }
+    document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
+    document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-view]").forEach(t=>t.classList.toggle("active",t===b));$("experimentView").style.display=b.dataset.view==="experiment"?"block":"none";$("datasetView").style.display=b.dataset.view==="dataset"?"block":"none"}));
+    document.querySelectorAll(".example-chip").forEach(b=>b.addEventListener("click",()=>{$("utterance").value=b.dataset.sample;$("charCount").textContent=b.dataset.sample.length;runSingle()}));
+    $("utterance").addEventListener("input",()=>$("charCount").textContent=$("utterance").value.length);
+    $("runBtn").addEventListener("click",runSingle);$("evaluateBtn").addEventListener("click",runBatch);$("runBatchFromTable").addEventListener("click",()=>{runBatch();document.querySelector('[data-view="experiment"]').click()});$("exportBtn").addEventListener("click",exportResults);$("resetBtn").addEventListener("click",reset);
+    $("threshold").addEventListener("input",()=>{$("thresholdValue").textContent=(Number($("threshold").value)/100).toFixed(2);if(lastUtterance)renderRoute(analyzeLocally(lastUtterance))});
+    $("exportBtn").disabled=true;renderDataset();loadStatus();
+  </script>
+</body>
+</html>
